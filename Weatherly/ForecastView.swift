@@ -112,12 +112,10 @@ private func errorView(message: String) -> some View {
 }
 
 #Preview {
-    // Need mock data for preview, adjust if WeatherModel structure is significantly different
-    // For preview, we can initialize with nil to see the loading state or a mock WeatherModel
     NavigationView {
         ForecastView(
             location: SavedLocation(name: "Cupertino", state: "CA", country: "US", lat: 37.3, lon: -122.0),
-            initialWeather: nil // Start in loading state for preview or provide full mock WeatherModel
+            initialWeather: nil
         )
     }
 }

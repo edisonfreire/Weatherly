@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct WeatherlyApp: App {
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
+
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .preferredColorScheme(
+                    isDarkMode ? .dark : nil
+                )
         }
     }
 }

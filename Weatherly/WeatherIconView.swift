@@ -9,7 +9,6 @@ import SwiftUI
 
 struct WeatherIconView: View {
     let iconCode: String
-    // Optional: Add a parameter to control if background is shown, if needed elsewhere
     // var showBackground: Bool = true
 
     var body: some View {

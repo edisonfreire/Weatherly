@@ -13,7 +13,10 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section(Constants.Settings.unitsSectionTitle) {
-                Picker(Constants.Settings.temperaturePickerLabel, selection: $viewModel.unit) {
+                Picker(
+                    Constants.Settings.temperaturePickerLabel,
+                    selection: $viewModel.unit
+                ) {
                     ForEach(viewModel.allUnits) { unit in
                         Text(unit.symbol).tag(unit)
                     }
@@ -21,9 +24,10 @@ struct SettingsView: View {
                 .pickerStyle(.segmented)
             }
 
-            // Section("Home Location") { /* Add UI later */ }
+            Section("Appearance") {
+                Toggle("Dark Mode", isOn: $viewModel.isDarkMode)
+            }
 
-            // Section("About") { /* Add app version, credits etc. */ }
         }
         .navigationTitle(Constants.Settings.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
@@ -31,7 +35,6 @@ struct SettingsView: View {
 }
 
 #Preview {
-    // Embed in NavigationView for realistic preview
     NavigationView {
         SettingsView()
     }

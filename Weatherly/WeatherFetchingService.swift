@@ -15,5 +15,4 @@ protocol WeatherFetchingService {
     // For fetching weather for saved locations / forecasts
     func fetchWeatherByCoordinates(lat: Double, lon: Double) -> AnyPublisher<WeatherModel, Error>
 
-    // Add other service methods if needed (e.g., parameterless call for Req #9)
 }

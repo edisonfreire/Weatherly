@@ -23,10 +23,9 @@ struct SearchResultsView: View {
                     Text(location.displayString.replacingOccurrences(of: "\(location.name), ", with: "")).font(.caption)
                 }
             }
-             .buttonStyle(.plain) // Use plain style for default text color
+             .buttonStyle(.plain)
         }
         .navigationTitle(Constants.SearchResults.navigationTitle)
     }
 }
 
-// Add Preview if needed

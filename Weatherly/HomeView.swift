@@ -9,12 +9,12 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
-    // State to present the Add Location Sheet
+    // State to present the Add Location sheet
     @State private var showingAddLocationSheet = false
 
     var body: some View {
         NavigationStack {
-            Group { // Use Group to easily switch content
+            Group {
                 if viewModel.savedLocations.isEmpty {
                     emptyStateView
                 } else {
@@ -25,8 +25,7 @@ struct HomeView: View {
             .toolbar { toolbarContent }
             // Sheet for adding new locations
             .sheet(isPresented: $showingAddLocationSheet) {
-                 // Pass necessary parts of the HomeViewModel or create a dedicated AddLocationViewModel
-                 AddLocationView(homeViewModel: viewModel)
+                AddLocationView(homeViewModel: viewModel)
             }
         }
     }
@@ -35,11 +34,11 @@ struct HomeView: View {
     private var emptyStateView: some View {
         VStack {
             Spacer()
-            Image(systemName: "list.star") // Example icon
-                 .resizable()
-                 .scaledToFit()
-                 .frame(width: 80, height: 80)
-                 .foregroundColor(.secondary)
+            Image(systemName: "list.star")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 80, height: 80)
+                .foregroundColor(.secondary)
             Text(Constants.Home.noSavedLocations)
                 .font(.title2)
                 .fontWeight(.semibold)
@@ -50,68 +49,82 @@ struct HomeView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
             Spacer()
-         }
-         .padding()
+        }
+        .padding()
     }
 
-    // View for the list of locations
+    // View for the list of saved locations
     private var locationsListView: some View {
-            List {
-                ForEach(viewModel.savedLocations) { location in
-                    ZStack { // Use ZStack to make the whole row tappable via NavigationLink
-                        // MODIFIED: Pass the full WeatherModel object for the location
-                        NavigationLink(destination: ForecastView(location: location, initialWeather: viewModel.weatherData[location.id])) {
-                           EmptyView() // NavigationLink requires a label, but we provide it below
-                        }
-                        .opacity(0) // Make the NavigationLink invisible
-
-                        SavedLocationCardView(
+        List {
+            ForEach(viewModel.savedLocations) { location in
+                ZStack {
+                    // Make the whole row tappable via invisible NavigationLink
+                    NavigationLink(
+                        destination: ForecastView(
                             location: location,
-                            weather: viewModel.weatherData[location.id], // This provides current temp for the card
-                            state: viewModel.locationStates[location.id] ?? .idle
+                            initialWeather: viewModel.weatherData[location.id]
                         )
-                        .contentShape(Rectangle()) // Ensure the card area is tappable for the link
+                    ) {
+                        EmptyView()
                     }
-                    .onAppear {
-                        viewModel.fetchWeatherIfNeeded(for: location)
-                    }
+                    .opacity(0)
+                    SavedLocationCardView(
+                        location: location,
+                        weather: viewModel.weatherData[location.id],
+                        state: viewModel.locationStates[location.id] ?? .idle
+                    )
+                    .contentShape(Rectangle())  // Ensure the card area is tappable
                 }
-                .onDelete(perform: viewModel.deleteLocation)
-                // Add section footer for spacing if needed
-                 Section { EmptyView() } footer: { Color.clear.frame(height: 10) } // Adds padding at bottom
+                .onAppear {
+                    viewModel.fetchWeatherIfNeeded(for: location)
+                }
             }
-            .listStyle(.plain)
-            .refreshable { await refreshWeatherData() } // Use async version if needed
+            .onDelete(perform: viewModel.deleteLocation)
+            // Extra footer space at bottom of list
+            Section {
+                EmptyView()
+            } footer: {
+                Color.clear.frame(height: 10)
+            }
         }
+        .listStyle(.plain)
+        // Pull-to-refresh triggers refreshing all locations
+        .refreshable {
+            await refreshWeatherData()
+        }
+    }
 
-    // Toolbar content builder
+    // Toolbar content (Edit and Add buttons, Settings link)
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-         ToolbarItem(placement: .navigationBarLeading) {
-             if !viewModel.savedLocations.isEmpty { EditButton() }
-         }
-         ToolbarItem(placement: .navigationBarTrailing) {
-             Button {
-                 viewModel.clearSearchResults() // Clear previous search state first
-                 showingAddLocationSheet = true // Present the sheet
-             } label: {
-                 Image(systemName: "plus.circle.fill")
-                     .accessibilityLabel("Add Location")
-             }
-         }
-         ToolbarItem(placement: .navigationBarTrailing) {
-              NavigationLink { SettingsView() } label: {
-                  Image(systemName: "gear")
-                      .accessibilityLabel("Settings")
-              }
-         }
+        ToolbarItem(placement: .navigationBarLeading) {
+            if !viewModel.savedLocations.isEmpty {
+                EditButton()
+            }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button {
+                // Reset any previous search state and show Add Location sheet
+                viewModel.clearSearchResults()
+                showingAddLocationSheet = true
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .accessibilityLabel("Add Location")
+            }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+            NavigationLink {
+                SettingsView()
+            } label: {
+                Image(systemName: "gear")
+                    .accessibilityLabel("Settings")
+            }
+        }
     }
 
-    // Async function for refreshable if needed
+    // Async refresh action for pull-to-refresh
     private func refreshWeatherData() async {
-        // TODO: Implement logic in ViewModel to re-fetch weather for all current locations
-        // viewModel.refreshAllLocations() or similar
-        print("Refresh triggered - Implement VM logic")
+        await viewModel.refreshAllLocations()
     }
 }
 

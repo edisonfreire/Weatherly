@@ -36,15 +36,13 @@ struct SavedLocation: Codable, Identifiable, Hashable { // Hashable needed for D
     }
 
     // Convenience initializer from GeocodeResponse (assuming GeocodeResponse exists)
-    // You might need to re-add GeocodeResponse if it was part of WeatherModel
+    // Might need to re-add GeocodeResponse if it was part of WeatherModel
     init?(from geocode: GeocodeResponse?) {
         guard let geocode = geocode else { return nil }
         self.init(name: geocode.name, state: geocode.state, country: geocode.country, lat: geocode.lat, lon: geocode.lon)
     }
 }
 
-// --- Make sure you have GeocodeResponse defined, likely in WeatherModel.swift ---
-// Example:
 struct GeocodeResponse: Codable, Identifiable, Hashable {
     var id: String { "\(name)-\(lat)-\(lon)" }
     let name: String
@@ -65,4 +63,3 @@ struct GeocodeResponse: Codable, Identifiable, Hashable {
         hasher.combine(name)
     }
 }
-// --- End GeocodeResponse Definition ---

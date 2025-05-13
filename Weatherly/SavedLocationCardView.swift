@@ -27,13 +27,11 @@ struct SavedLocationCardView: View {
                     .foregroundColor(.gray)
                     .lineLimit(1)
 
-                // Add animation for state changes
                 // .animation(.easeInOut, value: state)
             }
 
-            Spacer() // Pushes weather info to the right
+            Spacer()
 
-            // Content based on state
             Group {
                 switch state {
                 case .idle:
@@ -50,7 +48,6 @@ struct SavedLocationCardView: View {
                 case .loaded:
                     if let current = weather?.current, let condition = current.weather.first {
                         HStack(spacing: 10) {
-                            // Weather Condition Icon (Placeholder - Implement later)
                              WeatherIconView(iconCode: condition.icon)
                                 .frame(width: 40, height: 40)
                             
@@ -66,16 +63,14 @@ struct SavedLocationCardView: View {
                     }
                 }
             }
-            // Add animation based on state value changing
              .animation(.default, value: state)
 
         }
         .padding(.vertical, 10)
-        .contentShape(Rectangle()) // Make sure the whole HStack contributes to hit testing
+        .contentShape(Rectangle())
     }
 }
 
-// --- Add Preview for SavedLocationCardView ---
 #Preview {
     Group {
         SavedLocationCardView(location: SavedLocation(name: "London", state: nil, country: "GB", lat: 51.5, lon: -0.1), weather: nil, state: .idle)

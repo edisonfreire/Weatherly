@@ -43,16 +43,16 @@ struct WeatherModel: Codable, Equatable {
         let windDeg: Int
         let windGust: Double?
         let weather: [WeatherCondition]
-        let pop: Double?  // Probability of precipitation
-        let rain: Rain?  // Rain volume for the last hour
-        let snow: Snow?  // Snow volume for the last hour
+        let pop: Double?
+        let rain: Rain?
+        let snow: Snow?
 
         static func == (lhs: HourlyForecast, rhs: HourlyForecast) -> Bool {
             lhs.dt == rhs.dt
         }
     }
 
-    struct WeatherCondition: Codable, Equatable, Hashable {  // Added Hashable
+    struct WeatherCondition: Codable, Equatable, Hashable {
         let id: Int
         let main: String
         let description: String
@@ -64,7 +64,7 @@ struct WeatherModel: Codable, Equatable {
         let dt: Int
         let summary: String?
         let temp: Temperature
-        let feelsLike: DailyFeelsLike?  // ADDED: Feels like for different times of day
+        let feelsLike: DailyFeelsLike?
         let pressure: Int
         let humidity: Int
         let dewPoint: Double?
@@ -73,19 +73,19 @@ struct WeatherModel: Codable, Equatable {
         let windGust: Double?
         let weather: [WeatherCondition]
         let clouds: Int?
-        let pop: Double?  // Probability of precipitation
+        let pop: Double?
         let uvi: Double?
-        let rain: Double?  // Rain volume
-        let snow: Double?  // Snow volume
+        let rain: Double?
+        let snow: Double?
     }
 
     struct Temperature: Codable, Equatable {
         let day: Double
         let min: Double
         let max: Double
-        let night: Double?  // ADDED
-        let eve: Double?  // ADDED
-        let morn: Double?  // ADDED
+        let night: Double?
+        let eve: Double?
+        let morn: Double?
     }
 
     struct DailyFeelsLike: Codable, Equatable {
@@ -104,7 +104,6 @@ struct WeatherModel: Codable, Equatable {
         }
     }
 
-    // ADDED: Struct for snow volume (used in current, hourly, daily)
     struct Snow: Codable, Equatable {
         let oneHour: Double?  // Using "oneHour" to match "1h" key
 
