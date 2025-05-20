@@ -9,8 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
-    // State to present the Add Location sheet
     @State private var showingAddLocationSheet = false
+    @State private var showingSettingsView = false
 
     var body: some View {
         NavigationStack {
@@ -26,6 +26,9 @@ struct HomeView: View {
             // Sheet for adding new locations
             .sheet(isPresented: $showingAddLocationSheet) {
                 AddLocationView(homeViewModel: viewModel)
+            }
+            .navigationDestination(isPresented: $showingSettingsView) {
+                SettingsView()
             }
         }
     }
@@ -80,6 +83,7 @@ struct HomeView: View {
                 }
             }
             .onDelete(perform: viewModel.deleteLocation)
+            .onMove(perform: viewModel.moveLocation)
             // Extra footer space at bottom of list
             Section {
                 EmptyView()
@@ -104,7 +108,7 @@ struct HomeView: View {
         }
         ToolbarItem(placement: .navigationBarTrailing) {
             Button {
-                // Reset any previous search state and show Add Location sheet
+
                 viewModel.clearSearchResults()
                 showingAddLocationSheet = true
             } label: {
@@ -113,8 +117,8 @@ struct HomeView: View {
             }
         }
         ToolbarItem(placement: .navigationBarTrailing) {
-            NavigationLink {
-                SettingsView()
+            Button {
+                showingSettingsView = true
             } label: {
                 Image(systemName: "gear")
                     .accessibilityLabel("Settings")

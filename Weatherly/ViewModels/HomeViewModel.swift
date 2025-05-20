@@ -45,8 +45,6 @@ class HomeViewModel: ObservableObject {
         // Note: We don't fetch weather here; fetching occurs on view .onAppear or via pull-to-refresh.
     }
 
-    // MARK: - Location Persistence
-
     private func loadLocations() {
         guard let data = UserDefaults.standard.data(forKey: savedLocationsKey)
         else {
@@ -136,8 +134,6 @@ class HomeViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Location Management
-
     func addLocation(from geocode: GeocodeResponse) {
         guard let newLocation = SavedLocation(from: geocode) else { return }
         // Avoid adding duplicates (matching by coordinates)
@@ -169,7 +165,10 @@ class HomeViewModel: ObservableObject {
         saveLastUpdated()
     }
 
-    // MARK: - Weather Fetching (Per Location)
+    func moveLocation(from source: IndexSet, to destination: Int) {
+        savedLocations.move(fromOffsets: source, toOffset: destination)
+        saveLocations()
+    }
 
     func fetchWeatherIfNeeded(for location: SavedLocation) {
         let locationID = location.id

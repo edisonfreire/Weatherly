@@ -47,7 +47,6 @@ struct CurrentDayDetailsView: View {
             
             Divider()
             
-            // Grid for additional details
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .leading, spacing: 10) {
                 DetailItem(label: "Humidity", value: "\(current.humidity)%")
                 DetailItem(label: "Pressure", value: "\(current.pressure) hPa")
@@ -57,16 +56,14 @@ struct CurrentDayDetailsView: View {
                 if let visibility = current.visibility {
                     DetailItem(label: "Visibility", value: "\(visibility / 1000) km")
                 }
-//                if let windSpeed = current.windSpeed {
-//                    let windDisplayUnit = preferredUnitSystem == .fahrenheit ? "mph" : "m/s" // OpenWeather default units
-//                    DetailItem(label: "Wind Speed", value: "\(String(format: "%.1f", windSpeed)) \(windDisplayUnit)")
-//                }
+                if let windSpeed = current.windSpeed {
+                    DetailItem(label: "Wind Speed", value: "\(String(format: "%.1f", windSpeed)) m/s")
+                }
                 if let rainLastHour = current.rain?.oneHour {
-                    // CORRECTED: Use String(format:)
+
                     DetailItem(label: "Rain (1h)", value: "\(String(format: "%.1f", rainLastHour)) mm")
                 }
                 if let snowLastHour = current.snow?.oneHour {
-                    // CORRECTED: Use String(format:)
                     DetailItem(label: "Snow (1h)", value: "\(String(format: "%.1f", snowLastHour)) mm")
                 }
             }

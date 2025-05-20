@@ -27,5 +27,4 @@ struct Constants {
         static let temperaturePickerLabel = "Temperature"
     }
 
-    // Add structs for other views as needed
 }
